@@ -1,6 +1,6 @@
 using ManagementSystem.BLL.Services.abstractions;
 using ManagementSystem.BLL.Services.implementation;
-
+using ManagementSystem.DAL.Common;
 using ManagementSystem.DAL.Database;
 using ManagementSystem.DAL.Repos.abstractions;
 using ManagementSystem.DAL.Repos.Implementation;
@@ -17,13 +17,13 @@ namespace ManagementSystem.PL
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-			builder.Services.AddDbContext<ManagementSystemDBContext>(options =>
-	  options.UseSqlServer(
-		  builder.Configuration.GetConnectionString("DefaultConnection")));
-            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-            builder.Services.AddScoped<IDepartmentService, DepartmentService>();
-			builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-			builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+            builder.Services.AddDbContext<ManagementSystemDBContext>(option =>option.UseSqlServer(builder.Configuration.GetConnectionString("connectionstring22")));
+            //         builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            //         builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+            //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            //builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+            builder.Services.ModularToBusinessDllMethod();
+            builder.Services.ModularToBusinessBllMethod();
 
 			var app = builder.Build();
 
