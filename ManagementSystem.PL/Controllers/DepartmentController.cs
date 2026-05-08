@@ -31,7 +31,7 @@ namespace ManagementSystem.PL.Controllers
 			var department1=new Department();
 			department1.Name = department.Name;
 			await departmentService.AddDepartment(department1);
-			return Ok(department1);
+			return RedirectToAction(nameof(Index));
 		}
 	}
 }
