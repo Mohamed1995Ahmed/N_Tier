@@ -1,7 +1,9 @@
 ﻿@* Views/Employee/Index.cshtml *@
 
 @using ManagementSystem.DAL.Models
-@model List<Employee>
+@using ManagementSystem.BLL.ViemModels
+
+@model List<EmployeeDto>
 
 @{
     ViewData["Title"] = "Employees";
@@ -29,6 +31,8 @@
                     <tr>
                         <th>Name</th>
                         <th>Department Id</th>
+                        <th>Salary </th>
+
                     </tr>
                 </thead>
 
@@ -39,6 +43,8 @@
                         <tr>
                             <td>@item.Name</td>
                             <td>@item.DepartmentId</td>
+                            <td>@item.Salary</td>
+
                         </tr>
                     }
 

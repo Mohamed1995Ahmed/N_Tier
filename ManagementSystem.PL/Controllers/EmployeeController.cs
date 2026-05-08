@@ -20,6 +20,7 @@ namespace ManagementSystem.PL.Controllers
 		public async Task<IActionResult> Index()
 		{
 			var employes = await employeeService.GetAll();
+			
 
 			return View("index", employes);
 		}
@@ -37,14 +38,8 @@ namespace ManagementSystem.PL.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				var emps = new Employee
-				{
-					Name = model.Name,
-					Salary = model.Salary,
-					DepartmentId = model.DepartmentId,
-
-				};
-				await employeeService.Add(emps);
+			
+				await employeeService.Add(model);
 
 				return RedirectToAction(nameof(Index));
 			}

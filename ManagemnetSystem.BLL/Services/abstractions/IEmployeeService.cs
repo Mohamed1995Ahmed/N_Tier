@@ -1,4 +1,5 @@
-﻿using ManagementSystem.DAL.Models;
+﻿using ManagementSystem.BLL.ViemModels;
+using ManagementSystem.DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +11,11 @@ namespace ManagementSystem.BLL.Services.abstractions
 	public interface IEmployeeService
 	{
 		
-			Task Add(Employee employee);
+			Task Add(CreateEmployee employee);
 			//Task Update(Employee employee);
 			//Task Delete(int id);
 			//Task<Employee?> GetById(int id);
-			Task<List<Employee>> GetAll();
+			Task<List<EmployeeDto>> GetAll();
 		
 	}
 }

@@ -1,4 +1,5 @@
-﻿using ManagementSystem.DAL.Models;
+﻿using ManagementSystem.BLL.ViemModels;
+using ManagementSystem.DAL.Models;
 using ManagementSystem.DAL.Repos.abstractions;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace ManagementSystem.BLL.Services.abstractions
 {
 	public interface IDepartmentService
 	{
-		Task<List<Department>> GetAllDepartments();
+		Task<List<DepartmentDto>> GetAllDepartments();
 		Task<Department?> GetDepartmentById(int id);
 		Task AddDepartment(Department department);
 		Task UpdateDepartment(Department department);

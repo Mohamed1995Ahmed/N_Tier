@@ -1,4 +1,5 @@
 ﻿using ManagementSystem.BLL.Services.abstractions;
+using ManagementSystem.BLL.ViemModels;
 using ManagementSystem.DAL.Models;
 using ManagementSystem.DAL.Repos.abstractions;
 using System;
@@ -49,25 +50,18 @@ namespace ManagementSystem.BLL.Services.implementation
 			throw new NotImplementedException();
 		}
 
-		public async Task<List<Department>> GetAll()
-		{
-		var departments=await	departmentRepository.GetAll();
-			if (departments == null)
-			{
-				return  departments = await departmentRepository.GetAll();
-			}
-			return departments;
-		} 
-
-		public async Task<List<Department>> GetAllDepartments()
+		public async Task<List<DepartmentDto>> GetAllDepartments()
 		{
 			var departments = await departmentRepository.GetAll();
-			if (departments == null)
+
+			return departments.Select(d => new DepartmentDto
 			{
-				return departments = await departmentRepository.GetAll();
-			}
-			return departments;
+				Id = d.Id,
+				Name = d.Name
+			}).ToList();
 		}
+
+	
 
 		public Task<Department?> GetById(int id)
 		{
