@@ -1,0 +1,8 @@
+﻿@using ManagementSystem.DAL.Models;
+@model List<Employee>;
+
+@foreach(var item in Model)
+{
+    <h3>@item.Name</h3>
+    <h2>@item.DepartmentId</h2>
+}
