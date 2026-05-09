@@ -1,7 +1,9 @@
-﻿using ManagementSystem.BLL.Services.abstractions;
+﻿using AutoMapper;
+using ManagementSystem.BLL.Services.abstractions;
 using ManagementSystem.BLL.ViemModels;
 using ManagementSystem.DAL.Models;
 using ManagementSystem.DAL.Repos.abstractions;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,18 +15,16 @@ namespace ManagementSystem.BLL.Services.implementation
 	public class EmployeeService : IEmployeeService
 	{
 		IEmployeeRepository employeeRepository;
-		public EmployeeService(IEmployeeRepository employeeRepository)
+		private readonly IMapper mapper;
+
+		public EmployeeService(IEmployeeRepository employeeRepository,IMapper mapper)
 		{
 			this.employeeRepository = employeeRepository;
+			this.mapper = mapper;
 		}
 		public async Task Add(CreateEmployee model)
 		{
-			var employee = new Employee
-			{
-				Name = model.Name,
-				Salary = model.Salary,
-				DepartmentId = model.DepartmentId
-			};
+			var employee = mapper.Map<CreateEmployee, Employee>(model);
 
 			await employeeRepository.Add(employee);
 		}
@@ -32,14 +32,11 @@ namespace ManagementSystem.BLL.Services.implementation
 		public async Task<List<EmployeeDto>> GetAll()
 		{
 			var employees = await employeeRepository.GetAll();
+			var emps=mapper.Map<List<EmployeeDto>>(employees);
+			
+			
+			return emps;
 
-			return employees.Select(e => new EmployeeDto
-			{
-				
-				Name = e.Name,
-				Salary = e.Salary,
-				DepartmentId = e.DepartmentId
-			}).ToList();
 		}
 	}
 }

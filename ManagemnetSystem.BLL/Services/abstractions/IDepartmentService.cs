@@ -13,7 +13,7 @@ namespace ManagementSystem.BLL.Services.abstractions
 	{
 		Task<List<DepartmentDto>> GetAllDepartments();
 		Task<Department?> GetDepartmentById(int id);
-		Task AddDepartment(Department department);
+		Task AddDepartment(CreateDepartment department);
 		Task UpdateDepartment(Department department);
 		Task DeleteDepartment(int id);
 		Task<bool> DepartmentExists(int id);

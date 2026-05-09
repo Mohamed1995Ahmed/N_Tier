@@ -20,7 +20,11 @@ namespace ManagementSystem.PL.Controllers
 		public async Task<IActionResult> Index()
 		{
 			var employes = await employeeService.GetAll();
-			
+			var x = 10;
+			x = 50;
+			dynamic y = 77;
+			y = "asd";
+			ViewBag.y2 = y;
 
 			return View("index", employes);
 		}

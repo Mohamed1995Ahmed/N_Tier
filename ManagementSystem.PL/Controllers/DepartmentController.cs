@@ -28,9 +28,8 @@ namespace ManagementSystem.PL.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Add(CreateDepartment department)
 		{
-			var department1=new Department();
-			department1.Name = department.Name;
-			await departmentService.AddDepartment(department1);
+			
+			await departmentService.AddDepartment(department);
 			return RedirectToAction(nameof(Index));
 		}
 	}

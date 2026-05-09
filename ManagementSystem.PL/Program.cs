@@ -1,3 +1,4 @@
+using ManagementSystem.BLL.Mapper;
 using ManagementSystem.BLL.Services.abstractions;
 using ManagementSystem.BLL.Services.implementation;
 using ManagementSystem.DAL.Common;
@@ -24,6 +25,7 @@ namespace ManagementSystem.PL
             //builder.Services.AddScoped<IEmployeeService, EmployeeService>();
             builder.Services.ModularToBusinessDllMethod();
             builder.Services.ModularToBusinessBllMethod();
+            builder.Services.AddAutoMapper(a=>a.AddProfile<ManagementSystemProfile>());
 
 			var app = builder.Build();
 
