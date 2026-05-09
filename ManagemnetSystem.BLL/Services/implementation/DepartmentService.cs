@@ -1,4 +1,5 @@
-﻿using ManagementSystem.BLL.Services.abstractions;
+﻿using AutoMapper;
+using ManagementSystem.BLL.Services.abstractions;
 using ManagementSystem.BLL.ViemModels;
 using ManagementSystem.DAL.Models;
 using ManagementSystem.DAL.Repos.abstractions;
@@ -13,21 +14,25 @@ namespace ManagementSystem.BLL.Services.implementation
 	public class DepartmentService : IDepartmentService
 	{
 		private readonly IDepartmentRepository departmentRepository;
+		private readonly IMapper mapper;
 
-		public DepartmentService(IDepartmentRepository departmentRepository)
+		public DepartmentService(IDepartmentRepository departmentRepository,IMapper mapper)
 		{
 			this.departmentRepository = departmentRepository;
+			this.mapper = mapper;
 		}
 	
 		
 
-		public async Task AddDepartment(Department department)
+		public async Task AddDepartment(CreateDepartment department)
 		{
 			if (department == null)
 			{
 				throw new ArgumentNullException();
 			}
-			await departmentRepository.Add(department);
+			var dept=mapper.Map<CreateDepartment,Department>(department);
+
+			await departmentRepository.Add(dept);
 		}
 
 		public Task Delete(int id)
@@ -54,11 +59,8 @@ namespace ManagementSystem.BLL.Services.implementation
 		{
 			var departments = await departmentRepository.GetAll();
 
-			return departments.Select(d => new DepartmentDto
-			{
-				Id = d.Id,
-				Name = d.Name
-			}).ToList();
+			var deptDto = mapper.Map<List<DepartmentDto>>(departments);
+			return deptDto;
 		}
 
 	
