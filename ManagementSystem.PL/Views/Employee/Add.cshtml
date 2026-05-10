@@ -1,38 +1,67 @@
-﻿@using ManagementSystem.BLL.ViemModels
+﻿@* Views/Employee/Add.cshtml *@
+@using ManagementSystem.BLL.ViemModels
+@using ManagementSystem.PL.SharedResource
 @using Microsoft.AspNetCore.Mvc.Rendering
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResource> Localizer
 
 @model CreateEmployee
-
 @{
+    ViewData["Title"] = Localizer["AddEmployee"];
     SelectList departments = new SelectList(ViewBag.Department, "Id", "Name");
 }
 
-<form asp-action="Add" asp-controller="Employee" method="post">
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-primary text-white text-center py-3">
+                    <h3>@Localizer["AddEmployee"]</h3>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Add" asp-controller="Employee" method="post">
 
-    <div>
-        <label asp-for="Name"></label>
-        <input asp-for="Name" class="form-control" />
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label fw-bold">
+                                @Localizer["EmployeeName"]
+                            </label>
+                            <input asp-for="Name" class="form-control form-control-lg" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Salary" class="form-label fw-bold">
+                                @Localizer["Salary"]
+                            </label>
+                            <input asp-for="Salary" class="form-control form-control-lg" />
+                            <span asp-validation-for="Salary" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="DepartmentId" class="form-label fw-bold">
+                                @Localizer["Department"]
+                            </label>
+                            <select asp-for="DepartmentId"
+                                    asp-items="departments"
+                                    class="form-control form-control-lg">
+                                <option value="">@Localizer["SelectDepartment"]</option>
+                            </select>
+                            <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                @Localizer["Save"]
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
 
-    <div>
-        <label asp-for="Salary"></label>
-        <input asp-for="Salary" class="form-control" />
-    </div>
-
-    <div>
-        <label asp-for="DepartmentId"></label>
-
-        <select asp-for="DepartmentId"
-                asp-items="departments"
-                class="form-control">
-
-            <option value="">-- Select Department --</option>
-
-        </select>
-    </div>
-
-    <button type="submit" class="btn btn-primary">
-        Save
-    </button>
-
-</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

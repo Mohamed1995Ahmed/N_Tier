@@ -1,6 +1,7 @@
-using System.Diagnostics;
 using ManagementSystem.PL.Models;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace ManagementSystem.PL.Controllers
 {
@@ -12,8 +13,21 @@ namespace ManagementSystem.PL.Controllers
         {
             _logger = logger;
         }
+		public IActionResult SetLanguage(string culture, string returnUrl)
+		{
+			Response.Cookies.Append(
+				CookieRequestCultureProvider.DefaultCookieName,
+				CookieRequestCultureProvider.MakeCookieValue(
+					new RequestCulture(culture)),
+				new CookieOptions
+				{
+					Expires = DateTimeOffset.UtcNow.AddYears(1)
+				});
 
-        public IActionResult Index()
+			return LocalRedirect(returnUrl);
+		}
+
+		public IActionResult Index()
         {
             return View();
         }
