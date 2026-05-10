@@ -1,54 +1,89 @@
-using ManagementSystem.BLL.Mapper;
-using ManagementSystem.BLL.Services.abstractions;
-using ManagementSystem.BLL.Services.implementation;
+﻿using ManagementSystem.BLL.Mapper;
 using ManagementSystem.DAL.Common;
 using ManagementSystem.DAL.Database;
-using ManagementSystem.DAL.Repos.abstractions;
-using ManagementSystem.DAL.Repos.Implementation;
-
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace ManagementSystem.PL
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
+	public class Program
+	{
+		public static void Main(string[] args)
+		{
+			var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            builder.Services.AddControllersWithViews();
-            builder.Services.AddDbContext<ManagementSystemDBContext>(option =>option.UseSqlServer(builder.Configuration.GetConnectionString("connectionstring22")));
-            //         builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-            //         builder.Services.AddScoped<IDepartmentService, DepartmentService>();
-            //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-            //builder.Services.AddScoped<IEmployeeService, EmployeeService>();
-            builder.Services.ModularToBusinessDllMethod();
-            builder.Services.ModularToBusinessBllMethod();
-            builder.Services.AddAutoMapper(a=>a.AddProfile<ManagementSystemProfile>());
+			// ✅ Localization services
+			//builder.Services.AddLocalization(options =>
+			//	options.ResourcesPath = "SharedResource");
+
+			builder.Services.AddControllersWithViews()
+				.AddViewLocalization()
+				.AddDataAnnotationsLocalization(options =>
+				{
+					options.DataAnnotationLocalizerProvider = (type, factory) =>
+						factory.Create(typeof(SharedResource.SharedResource));
+				});
+
+			builder.Services.Configure<RequestLocalizationOptions>(options =>
+			{
+				var supportedCultures = new[]
+				{
+					new CultureInfo("en"),
+					new CultureInfo("ar")
+				};
+
+				options.DefaultRequestCulture = new RequestCulture("en");
+				options.SupportedCultures = supportedCultures;
+				options.SupportedUICultures = supportedCultures;
+
+				// ✅ Fallback to parent cultures (e.g. "ar-EG" → "ar")
+				options.FallBackToParentCultures = true;
+				options.FallBackToParentUICultures = true;
+
+				// ✅ Cookie has highest priority
+				options.RequestCultureProviders = new List<IRequestCultureProvider>
+				{
+					new CookieRequestCultureProvider(),
+					new QueryStringRequestCultureProvider(),
+					new AcceptLanguageHeaderRequestCultureProvider()
+				};
+			});
+
+			// ✅ Database
+			builder.Services.AddDbContext<ManagementSystemDBContext>(option =>
+				option.UseSqlServer(
+					builder.Configuration.GetConnectionString("connectionstring22")));
+
+			// ✅ Services
+			builder.Services.ModularToBusinessDllMethod();
+			builder.Services.ModularToBusinessBllMethod();
+			builder.Services.AddAutoMapper(a =>
+				a.AddProfile<ManagementSystemProfile>());
 
 			var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+			// ✅ Exception handling
+			if (!app.Environment.IsDevelopment())
+			{
+				app.UseExceptionHandler("/Home/Error");
+				app.UseHsts();
+			}
 
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
+			app.UseHttpsRedirection();
+			app.UseStaticFiles();
+			app.UseRouting();
 
-            app.UseRouting();
+			// ✅ MUST come before UseAuthorization
+			app.UseRequestLocalization();
 
-            app.UseAuthorization();
+			app.UseAuthorization();
 
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+			app.MapControllerRoute(
+				name: "default",
+				pattern: "{controller=Home}/{action=Index}/{id?}");
 
-            app.Run();
-        }
-    }
+			app.Run();
+		}
+	}
 }
